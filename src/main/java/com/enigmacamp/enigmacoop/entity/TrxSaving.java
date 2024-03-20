@@ -1,5 +1,6 @@
 package com.enigmacamp.enigmacoop.entity;
 
+import com.enigmacamp.enigmacoop.constant.SavingType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,26 +8,26 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
-import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="m_nasabah")
-public class Nasabah {
-
+@Table(name="trx_saving")
+public class TrxSaving {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private String fullName;
-    private String phoneNumber;
-    private String address;
-    private Date joinDate;
-    private String status;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    private Long amount;
+
+    @ManyToOne
     @JoinColumn(name = "saving_id")
     private Saving saving;
+
+    @Enumerated(EnumType.STRING)
+    private SavingType savingType;
+
+    private Date date;
 }
