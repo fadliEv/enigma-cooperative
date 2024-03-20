@@ -7,25 +7,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
-import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="m_nasabah")
-public class Nasabah {
+@Table(name="saving")
+public class Saving {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private String fullName;
-    private String phoneNumber;
-    private String address;
-    private Date joinDate;
-    private String status;
+    private Long balance;
+    private Date lastTransctionDate;
 
-    @OneToMany(mappedBy = "nasabah",cascade = CascadeType.ALL)
-    private List<Saving> savingList;
+    @ManyToOne
+    @JoinColumn(name = "nasabah_id",nullable = false)
+    private Nasabah nasabah;
 }
