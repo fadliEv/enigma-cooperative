@@ -1,6 +1,6 @@
 package com.enigmacamp.enigmacoop.service;
 
-import com.enigmacamp.enigmacoop.model.Nasabah;
+import com.enigmacamp.enigmacoop.entity.Nasabah;
 
 import java.util.List;
 

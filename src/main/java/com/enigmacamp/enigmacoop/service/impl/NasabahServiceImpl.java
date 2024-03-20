@@ -1,6 +1,6 @@
 package com.enigmacamp.enigmacoop.service.impl;
 
-import com.enigmacamp.enigmacoop.model.Nasabah;
+import com.enigmacamp.enigmacoop.entity.Nasabah;
 import com.enigmacamp.enigmacoop.repository.NasabahRepository;
 import com.enigmacamp.enigmacoop.service.NasabahService;
 import lombok.AllArgsConstructor;
