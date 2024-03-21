@@ -24,14 +24,12 @@ public class TrxSavingServiceImpl implements TrxSavingService {
     private final SavingService savingService;
     private final NasabahService nasabahService;
 
-
+    // Register nasabah - data saving
     @Override
     @Transactional(rollbackOn = Exception.class)
     public TrxSaving createTrxSaving(TrxSaving trxSaving) {
         // cek saving apakah ada
         Saving saving = savingService.getSavingById(trxSaving.getSaving().getId());
-        // cek nasabah apakah ada
-        nasabahService.getById(trxSaving.getSaving().getNasabah().getId());
         // Cek apakah topup atau penarikan saldo
         if (trxSaving.getSavingType().equals(SavingType.DEBIT)){
            saving.setBalance(saving.getBalance()+trxSaving.getAmount());
@@ -47,6 +45,6 @@ public class TrxSavingServiceImpl implements TrxSavingService {
 
     @Override
     public List<TrxSaving> getListTrxSaving() {
-        return null;
+        return trxSavingRepository.findAll();
     }
 }

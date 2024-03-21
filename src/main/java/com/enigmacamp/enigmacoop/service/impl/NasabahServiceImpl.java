@@ -1,8 +1,10 @@
 package com.enigmacamp.enigmacoop.service.impl;
 
 import com.enigmacamp.enigmacoop.entity.Nasabah;
+import com.enigmacamp.enigmacoop.entity.Saving;
 import com.enigmacamp.enigmacoop.repository.NasabahRepository;
 import com.enigmacamp.enigmacoop.service.NasabahService;
+import com.enigmacamp.enigmacoop.service.SavingService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,10 +20,19 @@ import java.util.Optional;
 public class NasabahServiceImpl implements NasabahService {
 
     private final NasabahRepository nasabahRepository;
+    private final SavingService savingService;
 
     @Override
     public Nasabah createNasabah(Nasabah nasabah) {
-        return nasabahRepository.saveAndFlush(nasabah);
+        // setiap register nasabah, maka akan dibuatkan data saving secara otomatis dengan
+        // data awal saldonya adalah 0
+        Nasabah newNasabah = nasabahRepository.saveAndFlush(nasabah);
+        Saving newSaving = Saving.builder()
+                .balance(0L)
+                .nasabah(newNasabah)
+                .build();
+        savingService.createSaving(newSaving);
+        return newNasabah;
     }
 
     @Override

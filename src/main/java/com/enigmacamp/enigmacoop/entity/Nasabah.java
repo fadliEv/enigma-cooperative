@@ -26,7 +26,7 @@ public class Nasabah {
     private Date joinDate;
     private String status;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinColumn(name = "saving_id")
     private Saving saving;
 }
