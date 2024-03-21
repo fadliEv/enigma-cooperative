@@ -26,7 +26,9 @@ public class Nasabah {
     private Date joinDate;
     private String status;
 
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JoinColumn(name = "saving_id")
+    @OneToOne(mappedBy = "nasabah",cascade = CascadeType.ALL)
     private Saving saving;
+
+    @OneToMany(mappedBy = "nasabah",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<Loan> loanList;
 }
