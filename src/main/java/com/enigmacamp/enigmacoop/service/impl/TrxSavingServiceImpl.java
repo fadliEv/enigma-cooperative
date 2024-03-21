@@ -4,6 +4,7 @@ import com.enigmacamp.enigmacoop.constant.SavingType;
 import com.enigmacamp.enigmacoop.entity.Nasabah;
 import com.enigmacamp.enigmacoop.entity.Saving;
 import com.enigmacamp.enigmacoop.entity.TrxSaving;
+import com.enigmacamp.enigmacoop.model.request.TrxSavingRequest;
 import com.enigmacamp.enigmacoop.repository.TrxSavingRepository;
 import com.enigmacamp.enigmacoop.service.NasabahService;
 import com.enigmacamp.enigmacoop.service.SavingService;
@@ -27,20 +28,23 @@ public class TrxSavingServiceImpl implements TrxSavingService {
     // Register nasabah - data saving
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public TrxSaving createTrxSaving(TrxSaving trxSaving) {
-        // cek saving apakah ada
-        Saving saving = savingService.getSavingById(trxSaving.getSaving().getId());
-        // Cek apakah topup atau penarikan saldo
-        if (trxSaving.getSavingType().equals(SavingType.DEBIT)){
-           saving.setBalance(saving.getBalance()+trxSaving.getAmount());
+    public TrxSaving createTrxSaving(TrxSavingRequest trxSavingRequest) {
+        Saving saving = savingService.getSavingById(trxSavingRequest.getSavingId());
+        if (trxSavingRequest.getSavingType().equals(SavingType.DEBIT)){
+           saving.setBalance(saving.getBalance()+trxSavingRequest.getAmount());
         }else{
-            if (trxSaving.getAmount() < saving.getBalance()) {
-                saving.setBalance(saving.getBalance()-trxSaving.getAmount());
+            if (trxSavingRequest.getAmount() < saving.getBalance()) {
+                saving.setBalance(saving.getBalance()-trxSavingRequest.getAmount());
             }else{
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Saldo Tidak cukup");
             }
         }
-        return trxSavingRepository.saveAndFlush(trxSaving);
+        TrxSaving newTrxSaving = TrxSaving.builder()
+                .amount(trxSavingRequest.getAmount())
+                .saving(saving)
+                .savingType(trxSavingRequest.getSavingType())
+                .build();
+        return trxSavingRepository.saveAndFlush(newTrxSaving);
     }
 
     @Override
