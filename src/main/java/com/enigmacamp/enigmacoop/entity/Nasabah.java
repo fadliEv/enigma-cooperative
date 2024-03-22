@@ -25,10 +25,4 @@ public class Nasabah {
     private String address;
     private Date joinDate;
     private String status;
-
-    @OneToOne(mappedBy = "nasabah",cascade = CascadeType.ALL)
-    private Saving saving;
-
-    @OneToMany(mappedBy = "nasabah",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private List<Loan> loanList;
 }

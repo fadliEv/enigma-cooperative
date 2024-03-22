@@ -1,6 +1,7 @@
-package com.enigmacamp.enigmacoop.entity;
+package com.enigmacamp.enigmacoop.model.request;
 
 import com.enigmacamp.enigmacoop.constant.LoanStatus;
+import com.enigmacamp.enigmacoop.entity.Nasabah;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,21 +11,13 @@ import java.sql.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 @Builder
-@Table(name="loan")
-public class Loan {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+public class LoanRequest {
     private Long amount;
     private Double interestRate;
     private Date startDate;
     private Date dueDate;
     @Enumerated(EnumType.STRING)
     private LoanStatus status;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "nasabah_id")
-    private Nasabah nasabah;
+    private String nasabahId;
 }
