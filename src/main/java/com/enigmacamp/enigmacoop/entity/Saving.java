@@ -1,9 +1,11 @@
 package com.enigmacamp.enigmacoop.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
+import java.util.List;
 
 /**
  * Menyimpan saldo untuk nasabah
@@ -25,6 +27,10 @@ public class Saving {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "nasabah_id")
     private Nasabah nasabah;
+
+    @OneToMany(mappedBy = "saving",cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<TrxSaving> trxSavingList;
 }
 
 
