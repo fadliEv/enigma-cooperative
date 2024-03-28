@@ -1,8 +1,7 @@
 package com.enigmacamp.enigmacoop.controller;
 
-import com.enigmacamp.enigmacoop.entity.Nasabah;
 import com.enigmacamp.enigmacoop.entity.Saving;
-import com.enigmacamp.enigmacoop.model.WebResponse;
+import com.enigmacamp.enigmacoop.model.response.WebResponse;
 import com.enigmacamp.enigmacoop.service.SavingService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

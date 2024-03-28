@@ -1,5 +1,6 @@
-package com.enigmacamp.enigmacoop.model;
+package com.enigmacamp.enigmacoop.model.response;
 
+import com.enigmacamp.enigmacoop.model.response.PagingResponse;
 import lombok.*;
 
 @Builder

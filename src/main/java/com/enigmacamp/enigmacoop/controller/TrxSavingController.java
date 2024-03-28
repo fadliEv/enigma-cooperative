@@ -1,9 +1,8 @@
 package com.enigmacamp.enigmacoop.controller;
 
 
-import com.enigmacamp.enigmacoop.entity.Saving;
 import com.enigmacamp.enigmacoop.entity.TrxSaving;
-import com.enigmacamp.enigmacoop.model.WebResponse;
+import com.enigmacamp.enigmacoop.model.response.WebResponse;
 import com.enigmacamp.enigmacoop.model.request.TrxSavingRequest;
 import com.enigmacamp.enigmacoop.service.TrxSavingService;
 import lombok.AllArgsConstructor;

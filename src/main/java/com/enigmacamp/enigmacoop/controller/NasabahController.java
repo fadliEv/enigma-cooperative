@@ -1,13 +1,18 @@
 package com.enigmacamp.enigmacoop.controller;
 
 import com.enigmacamp.enigmacoop.entity.Nasabah;
-import com.enigmacamp.enigmacoop.model.PagingResponse;
-import com.enigmacamp.enigmacoop.model.WebResponse;
+import com.enigmacamp.enigmacoop.model.response.PagingResponse;
+import com.enigmacamp.enigmacoop.model.response.WebResponse;
+import com.enigmacamp.enigmacoop.model.request.NasabahRequest;
+import com.enigmacamp.enigmacoop.model.response.NasabahResponse;
+import com.enigmacamp.enigmacoop.service.AuthService;
 import com.enigmacamp.enigmacoop.service.NasabahService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,20 +20,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/nasabah")
 @AllArgsConstructor
+@PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
 public class NasabahController {
 
     private final NasabahService nasabahService;
 
-    @PostMapping
-    public ResponseEntity<WebResponse<Nasabah>> createNasabah(@RequestBody Nasabah nasabah){
-        Nasabah newNasabah = nasabahService.createNasabah(nasabah);
-        WebResponse<Nasabah> response = WebResponse.<Nasabah>builder()
-                .status(HttpStatus.CREATED.getReasonPhrase())
-                .message("Success register new nasabah")
-                .data(newNasabah)
-                .build();
-        return ResponseEntity.ok(response);
-    }
 
     @GetMapping
     public ResponseEntity<?> getAllNasabah(
