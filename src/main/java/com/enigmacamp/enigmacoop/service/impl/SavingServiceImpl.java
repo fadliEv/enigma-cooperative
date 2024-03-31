@@ -33,4 +33,12 @@ public class SavingServiceImpl implements SavingService {
         if (optionalSaving.isPresent()) return optionalSaving.get();
         throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Saving is not found");
     }
+
+    @Override
+    public Saving getSavingByNasabahId(String id) {
+        Optional<Saving> optionalSaving = Optional.ofNullable(savingRepository.getSavingByNasabahId(id));
+        if (optionalSaving.isPresent()) return optionalSaving.get();
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Saving is not found");
+    }
+
 }

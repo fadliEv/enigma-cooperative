@@ -2,6 +2,8 @@ package com.enigmacamp.enigmacoop.entity;
 
 import com.enigmacamp.enigmacoop.constant.NasabahStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,6 +38,7 @@ public class Nasabah {
     private NasabahStatus status;
 
     @OneToOne
+    @JsonIgnore
     private UserCredential userCredential;
 
     @PrePersist

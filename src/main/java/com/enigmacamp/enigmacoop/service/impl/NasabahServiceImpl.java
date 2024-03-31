@@ -1,41 +1,48 @@
 package com.enigmacamp.enigmacoop.service.impl;
 
+import com.enigmacamp.enigmacoop.constant.ERole;
 import com.enigmacamp.enigmacoop.constant.NasabahStatus;
 import com.enigmacamp.enigmacoop.entity.Nasabah;
+import com.enigmacamp.enigmacoop.entity.Role;
 import com.enigmacamp.enigmacoop.entity.Saving;
+import com.enigmacamp.enigmacoop.entity.UserCredential;
 import com.enigmacamp.enigmacoop.model.request.NasabahRequest;
 import com.enigmacamp.enigmacoop.repository.NasabahRepository;
-import com.enigmacamp.enigmacoop.service.NasabahService;
-import com.enigmacamp.enigmacoop.service.SavingService;
+import com.enigmacamp.enigmacoop.service.*;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class NasabahServiceImpl implements NasabahService {
 
     private final NasabahRepository nasabahRepository;
     private final SavingService savingService;
 
     @Override
-    public Nasabah createNasabah(NasabahRequest nasabahRequest) {
-        // setiap register nasabah, maka akan dibuatkan data saving secara otomatis dengan
-        // data awal saldonya adalah 0
+    public Nasabah createNasabah(NasabahRequest nasabahRequest,UserCredential userCredential) {
         Nasabah nasabah = Nasabah.builder()
                 .fullName(nasabahRequest.getFullName())
                 .email(nasabahRequest.getEmail())
                 .phoneNumber(nasabahRequest.getPhoneNumber())
                 .address(nasabahRequest.getAddress())
                 .status(NasabahStatus.ACTIVE)
+                .userCredential(userCredential)
                 .build();
         Nasabah newNasabah = nasabahRepository.saveAndFlush(nasabah);
+        // setiap register nasabah, maka akan dibuatkan data saving secara otomatis dengan
+        // data awal saldonya adalah 0
         Saving newSaving = Saving.builder()
                 .balance(0L)
                 .nasabah(newNasabah)
@@ -73,4 +80,18 @@ public class NasabahServiceImpl implements NasabahService {
         this.getById(id);
         nasabahRepository.deleteById(id);
     }
+
+    @Override
+    public Nasabah findByUsername(String username) {
+//        UserCredential userCredential = userService.findByUsername(username);
+//        log.info("User Credential : " + userCredential.getUsername() + " " + userCredential.getRoles());
+//        Nasabah nasabah = nasabahRepository.getNasabahByUserCredential(userCredential);
+//        log.info("Nasabah : " + nasabah.toString());
+        Optional<Nasabah> optionalNasabah = Optional.ofNullable(nasabahRepository.getNasabahByUserCredential_Username(username));
+        if (optionalNasabah.isPresent()) return  optionalNasabah.get();
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Nasabah Not Found");
+    }
+
+
+
 }

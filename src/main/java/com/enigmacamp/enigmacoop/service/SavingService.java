@@ -8,4 +8,5 @@ public interface SavingService {
     Saving createSaving(Saving saving);
     List<Saving> getListSaving();
     Saving getSavingById(String id);
+    Saving getSavingByNasabahId(String id);
 }

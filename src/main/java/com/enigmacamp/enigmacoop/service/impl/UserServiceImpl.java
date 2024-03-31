@@ -23,6 +23,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserCredential findByUsername(String username) {
+        return repository.findByUsername(username)
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Load by user username is fail"));
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return repository.findByUsername(username)
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Load by username is fail"));

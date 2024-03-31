@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class LoanController {
     }
 
     @GetMapping(path = "/{id}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     public ResponseEntity<?> getLoansByNasabahId(@PathVariable String id){
         List<Loan> loanList = loanService.getLoansByNasabahId(id);
         WebResponse<List<Loan>> response = WebResponse.<List<Loan>>builder()
@@ -46,7 +48,8 @@ public class LoanController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getLoansByNasabahId(
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
+    public ResponseEntity<?> getLoans(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(defaultValue = "10") Long minAmount,
@@ -70,6 +73,18 @@ public class LoanController {
                 .message("Success Get Loans")
                 .paging(pagingResponse)
                 .data(loanList.getContent())
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(path = "/approved/{id}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
+    public ResponseEntity<?> approveLoanById(@PathVariable String id){
+        Loan loan = loanService.approveLoanById(id);
+        WebResponse<Loan> response = WebResponse.<Loan>builder()
+                .status(HttpStatus.OK.getReasonPhrase())
+                .message("Success Update Loan Status")
+                .data(loan)
                 .build();
         return ResponseEntity.ok(response);
     }

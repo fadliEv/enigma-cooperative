@@ -71,23 +71,21 @@ public class AuthServiceImpl implements AuthService {
         Role roleCustomer = roleService.getOrSave(ERole.ROLE_CUSTOMER);
         // hash password
         String hashPassword = passwordEncoder.encode(nasabahRequest.getPassword());
-        // nasabah baru
-        Nasabah nasabah = nasabahService.createNasabah(nasabahRequest);
-        // user credential baru
-        UserCredential userCredential = UserCredential.builder()
-                .username(nasabahRequest.getUsername())
-                .password(hashPassword)
-                .roles(List.of(roleCustomer))
-                .build();
-        UserCredential savedUserCredential = credentialRepository.saveAndFlush(userCredential);
+        UserCredential userCred = credentialRepository.saveAndFlush(
+                UserCredential.builder()
+                        .username(nasabahRequest.getUsername())
+                        .password(hashPassword)
+                        .roles(List.of(roleCustomer))
+                        .build());
+        Nasabah nasabah = nasabahService.createNasabah(nasabahRequest, userCred);
         // list role
-        List<String> roles = userCredential.getRoles().stream().map(role -> role.getRole().name()).toList();
+        List<String> roles = userCred.getRoles().stream().map(role -> role.getRole().name()).toList();
         return NasabahResponse.builder()
                 .fullName(nasabah.getFullName())
                 .email(nasabah.getEmail())
                 .phoneNumber(nasabah.getPhoneNumber())
                 .address(nasabah.getAddress())
-                .username(savedUserCredential.getUsername())
+                .username(nasabahRequest.getUsername())
                 .roles(roles)
                 .build();
     }

@@ -47,6 +47,16 @@ public class SavingController {
                 .message("Success Get Saving By Id")
                 .data(findSaving)
                 .build();
+    }
+
+    @GetMapping("/nasabah/{id}")
+    public ResponseEntity<WebResponse<Saving>> getSavingByNasabahId(@PathVariable String id){
+        Saving findSaving = savingService.getSavingByNasabahId(id);
+        WebResponse<Saving> response = WebResponse.<Saving>builder()
+                .status(HttpStatus.OK.getReasonPhrase())
+                .message("Success Get Saving By Nasabah ID")
+                .data(findSaving)
+                .build();
         return ResponseEntity.ok(response);
     }
 

@@ -3,12 +3,15 @@ package com.enigmacamp.enigmacoop.service.impl;
 import com.enigmacamp.enigmacoop.constant.LoanStatus;
 import com.enigmacamp.enigmacoop.entity.Loan;
 import com.enigmacamp.enigmacoop.entity.Nasabah;
+import com.enigmacamp.enigmacoop.entity.Saving;
 import com.enigmacamp.enigmacoop.model.request.LoanRequest;
 import com.enigmacamp.enigmacoop.model.request.SearchLoanRequest;
 import com.enigmacamp.enigmacoop.model.response.LoanResponse;
 import com.enigmacamp.enigmacoop.repository.LoanRepository;
+import com.enigmacamp.enigmacoop.repository.SavingRepository;
 import com.enigmacamp.enigmacoop.service.LoanService;
 import com.enigmacamp.enigmacoop.service.NasabahService;
+import com.enigmacamp.enigmacoop.service.SavingService;
 import jakarta.persistence.criteria.Predicate;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,11 +19,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.swing.text.html.Option;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -28,7 +35,7 @@ import java.util.List;
 public class LoanServiceImpl implements LoanService {
     private final LoanRepository loanRepository;
     private final NasabahService nasabahService;
-
+    private final SavingService savingService;
     @Override
     @Transactional(rollbackFor = Exception.class)
     public LoanResponse createLoan(LoanRequest loanRequest) {
@@ -100,4 +107,27 @@ public class LoanServiceImpl implements LoanService {
             return criteriaBuilder.and(minAmountPredicate,maxAmountPredicate);
         };
     }
+
+    @Override
+    public Loan getById(String id) {
+        Optional<Loan> optionalLoan = loanRepository.findById(id);
+        if (optionalLoan.isPresent()) return  optionalLoan.get();
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Loan Not Found");
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Loan approveLoanById(String id) {
+        Loan findLoan = this.getById(id);
+        if (findLoan.getStatus() != LoanStatus.PENDING){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Status Not Valid to Approved");
+        }
+        findLoan.setStatus(LoanStatus.APPROVED);
+        loanRepository.save(findLoan);
+        Saving findSaving = savingService.getSavingByNasabahId(findLoan.getNasabah().getId());
+        findSaving.setBalance(findSaving.getBalance() + findLoan.getAmount());
+        savingService.createSaving(findSaving);
+        return findLoan;
+    }
+
 }
