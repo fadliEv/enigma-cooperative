@@ -47,6 +47,7 @@ public class SavingController {
                 .message("Success Get Saving By Id")
                 .data(findSaving)
                 .build();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/nasabah/{id}")
