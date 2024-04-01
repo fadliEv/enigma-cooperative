@@ -44,12 +44,12 @@ public class LoanServiceImpl implements LoanService {
         Loan newLoan = Loan.builder()
                 .amount(loanRequest.getAmount())
                 .dueDate(calendar.getTime())
-                .interestRate(5.0)
+                .interestRate(0.05)
                 .status(LoanStatus.PENDING)
                 .nasabah(findNasabah)
                 .build();
         Loan savedLoad = loanRepository.saveAndFlush(newLoan);
-        Double totalRepaymentAmount = loanRequest.getAmount() + (loanRequest.getAmount() * 0.05);
+        Double totalRepaymentAmount = loanRequest.getAmount() + (loanRequest.getAmount() * newLoan.getInterestRate());
         return LoanResponse.builder()
                 .id(savedLoad.getId())
                 .amount(savedLoad.getAmount())
