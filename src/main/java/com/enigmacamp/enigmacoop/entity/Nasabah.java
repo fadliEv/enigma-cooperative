@@ -28,6 +28,9 @@ public class Nasabah {
     @Column(unique = true)
     private String phoneNumber;
     private String address;
+    @Column(unique = true)
+    private String nik;
+    private Date birthDate;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false,updatable = false)

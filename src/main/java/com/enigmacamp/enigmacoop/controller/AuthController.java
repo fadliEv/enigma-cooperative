@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
-    @PostMapping("/register-nasabah")
-    public ResponseEntity<WebResponse<NasabahResponse>> createNasabah(
+    @PostMapping("/signup")
+    public ResponseEntity<WebResponse<NasabahResponse>> registerNasabah(
             @Valid @RequestBody NasabahRequest nasabahRequest){
         NasabahResponse nasabahResponse = authService.register(nasabahRequest);
         WebResponse<NasabahResponse> response = WebResponse.<NasabahResponse>builder()
@@ -31,7 +31,7 @@ public class AuthController {
                 .build();
         return ResponseEntity.ok(response);
     }
-    @PostMapping("/login")
+    @PostMapping("/signin")
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest){
         String token = authService.login(authRequest);
         WebResponse<String> response = WebResponse.<String>builder()

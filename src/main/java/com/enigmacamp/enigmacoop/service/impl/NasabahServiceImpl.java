@@ -36,6 +36,8 @@ public class NasabahServiceImpl implements NasabahService {
                 .fullName(nasabahRequest.getFullName())
                 .email(nasabahRequest.getEmail())
                 .phoneNumber(nasabahRequest.getPhoneNumber())
+                .birthDate(nasabahRequest.getBirthDate())
+                .nik(nasabahRequest.getNik())
                 .address(nasabahRequest.getAddress())
                 .status(NasabahStatus.ACTIVE)
                 .userCredential(userCredential)

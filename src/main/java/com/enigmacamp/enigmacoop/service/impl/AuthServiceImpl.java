@@ -86,6 +86,8 @@ public class AuthServiceImpl implements AuthService {
                 .phoneNumber(nasabah.getPhoneNumber())
                 .address(nasabah.getAddress())
                 .username(nasabahRequest.getUsername())
+                .nik(nasabahRequest.getNik())
+                .birthDate(nasabahRequest.getBirthDate())
                 .roles(roles)
                 .build();
     }
