@@ -26,7 +26,7 @@ public class SecurityConfiguration {
                 .sessionManagement(cfg ->cfg.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request ->
                         request.dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
-                                .requestMatchers("api/v1/auth/**").permitAll()
+                                .requestMatchers("api/v1/auth/**","api/v1/employee/**","api/v1/image/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAthenticationFilter, UsernamePasswordAuthenticationFilter.class)
