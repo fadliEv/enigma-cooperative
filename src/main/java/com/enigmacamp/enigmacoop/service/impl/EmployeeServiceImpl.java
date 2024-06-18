@@ -93,9 +93,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void delete(String id) {
         Employee employee = findByIdOrThrowNotFound(id);
-        String imageId = employee.getImage().getId();
+        if (employee.getImage() != null){
+            String imageId = employee.getImage().getId();
+            imageService.deleteById(imageId);
+        }
         repo.delete(employee);
-        imageService.deleteById(imageId);
     }
 
     @Override

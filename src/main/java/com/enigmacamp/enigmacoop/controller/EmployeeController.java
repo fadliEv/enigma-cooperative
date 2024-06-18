@@ -43,6 +43,7 @@ public class EmployeeController {
             responseBuilder.data(response);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseBuilder.build());
         }catch (Exception e){
+            responseBuilder.message(e.getMessage());
             responseBuilder.status(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBuilder.build());
         }
