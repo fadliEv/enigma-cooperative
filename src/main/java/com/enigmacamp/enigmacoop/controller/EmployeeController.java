@@ -29,13 +29,14 @@ public class EmployeeController {
     @PostMapping
     public ResponseEntity<WebResponse<?>> create(
             @RequestPart(name = "employee") String jsonEmployee,
-            @RequestPart(name = "image") MultipartFile image
+            @RequestPart(name = "image", required = false) MultipartFile image
     ){
         WebResponse.WebResponseBuilder<EmployeeResponse> responseBuilder = WebResponse.builder();
         try{
             EmployeeRequest request = objectMapper.readValue(jsonEmployee, new TypeReference<EmployeeRequest>() {});
-            request.setImage(image);
-            log.error("error: {}", request);
+            if (image != null && !image.isEmpty()){
+                request.setImage(image);
+            }
             EmployeeResponse response = service.create(request);
             responseBuilder.status(HttpStatus.CREATED.getReasonPhrase());
             responseBuilder.message("Success Create New Employee");

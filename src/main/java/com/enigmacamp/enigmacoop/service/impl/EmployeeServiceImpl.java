@@ -1,5 +1,6 @@
 package com.enigmacamp.enigmacoop.service.impl;
 
+import com.enigmacamp.enigmacoop.constant.PositionEmployee;
 import com.enigmacamp.enigmacoop.entity.Employee;
 import com.enigmacamp.enigmacoop.entity.Image;
 import com.enigmacamp.enigmacoop.model.request.EmployeeRequest;
@@ -9,6 +10,7 @@ import com.enigmacamp.enigmacoop.repository.EmployeeRepository;
 import com.enigmacamp.enigmacoop.service.EmployeeService;
 import com.enigmacamp.enigmacoop.service.ImageService;
 import com.enigmacamp.enigmacoop.utils.ValidationUtil;
+import jakarta.annotation.PostConstruct;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +21,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDate;
+import java.util.Date;
 
 
 @Service
@@ -52,11 +57,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public EmployeeResponse create(EmployeeRequest payload) {
+        log.info("Check Payload : ",payload.toString());
         validationUtil.validate(payload);
-        if (payload.getImage().isEmpty()) throw new ConstraintViolationException("image is required",null);
-        Image image = imageService.create(payload.getImage());
+//        if (payload.getImage().isEmpty()) throw new ConstraintViolationException("image is required",null);
         Employee employee = mapToEmployee(payload);
-        employee.setImage(image);
+        if (payload.getImage() != null && !payload.getImage().isEmpty() ) {
+            Image image = imageService.create(payload.getImage());
+            employee.setImage(image);
+        }
         repo.saveAndFlush(employee);
         return mapToEmployeeResponse(employee);
     }
@@ -76,7 +84,6 @@ public class EmployeeServiceImpl implements EmployeeService {
                     repo.delete(employee);
                     imageService.deleteById(employee.getImage().getId());
             }
-            log.error("Test Payload: {}", employee);
             Image image = imageService.create(payload.getImage());
             employee.setImage(image);
         }
@@ -85,8 +92,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void delete(String id) {
-        this.get(id);
-        repo.deleteById(id);
+        Employee employee = findByIdOrThrowNotFound(id);
+        String imageId = employee.getImage().getId();
+        repo.delete(employee);
+        imageService.deleteById(imageId);
+    }
+
+    @Override
+    public long count() {
+        return repo.count();
     }
 
     private Employee mapToEmployee(EmployeeRequest payload){
@@ -103,10 +117,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     private EmployeeResponse mapToEmployeeResponse(Employee employee){
-        ImageResponse imageResponse = ImageResponse.builder()
-                .name(employee.getImage().getName())
-                .url("/api/v1/image" + "/" + employee.getImage().getId())
-                .build();
+        ImageResponse imageResponse = ImageResponse.builder().build();
+        if (employee.getImage() != null){
+            imageResponse.setName(employee.getImage().getName());
+            imageResponse.setUrl("/api/v1/image" + "/" + employee.getImage().getId());
+        }
         return EmployeeResponse.builder()
                 .id(employee.getId())
                 .fullName(employee.getFullName())

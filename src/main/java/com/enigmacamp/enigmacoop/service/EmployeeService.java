@@ -14,4 +14,5 @@ public interface EmployeeService {
     EmployeeResponse update(EmployeeRequest payload);
     EmployeeResponse get(String id);
     void delete(String id);
+    long count();
 }
