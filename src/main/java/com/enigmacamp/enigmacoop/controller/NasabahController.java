@@ -1,13 +1,10 @@
 package com.enigmacamp.enigmacoop.controller;
 
 import com.enigmacamp.enigmacoop.entity.Nasabah;
+import com.enigmacamp.enigmacoop.model.request.NasabahRequest;
 import com.enigmacamp.enigmacoop.model.response.PagingResponse;
 import com.enigmacamp.enigmacoop.model.response.WebResponse;
-import com.enigmacamp.enigmacoop.model.request.NasabahRequest;
-import com.enigmacamp.enigmacoop.model.response.NasabahResponse;
-import com.enigmacamp.enigmacoop.service.AuthService;
 import com.enigmacamp.enigmacoop.service.NasabahService;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,13 +17,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/nasabah")
 @AllArgsConstructor
-@PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
 public class NasabahController {
 
     private final NasabahService nasabahService;
 
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
     public ResponseEntity<?> getAllNasabah(
             @RequestParam(defaultValue = "1") Integer page,
             @RequestParam(defaultValue = "10") Integer size
@@ -48,6 +45,7 @@ public class NasabahController {
     }
 
     @GetMapping(path = "/{id}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','CUSTOMER')")
     public ResponseEntity<?> getNasabahById(@PathVariable String id){
         Nasabah findNasabah = nasabahService.getById(id);
         WebResponse<Nasabah> response = WebResponse.<Nasabah>builder()
@@ -58,19 +56,9 @@ public class NasabahController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> deleteNasabahById(@PathVariable String id){
-        nasabahService.deleteById(id);
-        WebResponse<String> response = WebResponse.<String>builder()
-                .status(HttpStatus.OK.getReasonPhrase())
-                .message("Success Delete Nasabah")
-                .data("OK")
-                .build();
-        return ResponseEntity.ok(response);
-    }
-
     @PutMapping
-    public ResponseEntity<?> updateNasabahById(@RequestBody Nasabah nasabah){
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','CUSTOMER')")
+    public ResponseEntity<?> updateNasabahById(@RequestBody NasabahRequest nasabah){
         Nasabah updatedNasabah = nasabahService.update(nasabah) ;
         WebResponse<Nasabah> response = WebResponse.<Nasabah>builder()
                 .status(HttpStatus.OK.getReasonPhrase())

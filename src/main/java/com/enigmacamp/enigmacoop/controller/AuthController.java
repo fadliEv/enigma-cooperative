@@ -35,7 +35,7 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest){
         String token = authService.login(authRequest);
         WebResponse<String> response = WebResponse.<String>builder()
-                .status(HttpStatus.CREATED.getReasonPhrase())
+                .status(HttpStatus.OK.getReasonPhrase())
                 .message("Success Login")
                 .data(token)
                 .build();

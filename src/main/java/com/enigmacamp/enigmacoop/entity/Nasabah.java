@@ -30,11 +30,12 @@ public class Nasabah {
     private String address;
     @Column(unique = true)
     private String nik;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date birthDate;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false,updatable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss a", timezone = "Asia/Jakarta")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date joinDate;
 
     @Enumerated(EnumType.STRING)

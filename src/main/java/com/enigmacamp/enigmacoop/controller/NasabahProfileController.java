@@ -27,11 +27,10 @@ public class NasabahProfileController {
     public ResponseEntity<?> getMyProfile(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        log.info("Username : " + username);
         Nasabah nasabah = nasabahService.findByUsername(username);
         WebResponse<Nasabah> response = WebResponse.<Nasabah>builder()
                 .status(HttpStatus.OK.getReasonPhrase())
-                .message("Success Get Nasabah")
+                .message("Success Get Your Data")
                 .data(nasabah)
                 .build();
         return ResponseEntity.ok(response);

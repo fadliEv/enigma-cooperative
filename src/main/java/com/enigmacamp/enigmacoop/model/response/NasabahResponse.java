@@ -15,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class NasabahResponse {
+    private String id;
     private String fullName;
     private String email;
     private String phoneNumber;

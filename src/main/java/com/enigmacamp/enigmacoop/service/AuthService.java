@@ -1,9 +1,7 @@
 package com.enigmacamp.enigmacoop.service;
 
-import com.enigmacamp.enigmacoop.entity.UserCredential;
 import com.enigmacamp.enigmacoop.model.request.AuthRequest;
 import com.enigmacamp.enigmacoop.model.request.NasabahRequest;
-import com.enigmacamp.enigmacoop.model.response.AuthResponse;
 import com.enigmacamp.enigmacoop.model.response.NasabahResponse;
 
 public interface AuthService {

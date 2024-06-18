@@ -1,13 +1,11 @@
 package com.enigmacamp.enigmacoop.service.impl;
 
 import com.enigmacamp.enigmacoop.constant.ERole;
-import com.enigmacamp.enigmacoop.constant.NasabahStatus;
 import com.enigmacamp.enigmacoop.entity.Nasabah;
 import com.enigmacamp.enigmacoop.entity.Role;
 import com.enigmacamp.enigmacoop.entity.UserCredential;
 import com.enigmacamp.enigmacoop.model.request.AuthRequest;
 import com.enigmacamp.enigmacoop.model.request.NasabahRequest;
-import com.enigmacamp.enigmacoop.model.response.AuthResponse;
 import com.enigmacamp.enigmacoop.model.response.NasabahResponse;
 import com.enigmacamp.enigmacoop.repository.UserCredentialRepository;
 import com.enigmacamp.enigmacoop.security.JwtUtils;
@@ -15,7 +13,6 @@ import com.enigmacamp.enigmacoop.service.AuthService;
 import com.enigmacamp.enigmacoop.service.NasabahService;
 import com.enigmacamp.enigmacoop.service.RoleService;
 import jakarta.annotation.PostConstruct;
-import lombok.AllArgsConstructor;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -81,6 +78,7 @@ public class AuthServiceImpl implements AuthService {
         // list role
         List<String> roles = userCred.getRoles().stream().map(role -> role.getRole().name()).toList();
         return NasabahResponse.builder()
+                .id(nasabah.getId())
                 .fullName(nasabah.getFullName())
                 .email(nasabah.getEmail())
                 .phoneNumber(nasabah.getPhoneNumber())
