@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/employee")
 @Slf4j
-@PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
+//@PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN')")
 public class EmployeeController {
     private final EmployeeService service;
     private final ObjectMapper objectMapper;

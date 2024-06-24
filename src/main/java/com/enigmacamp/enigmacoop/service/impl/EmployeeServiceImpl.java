@@ -93,11 +93,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void delete(String id) {
         Employee employee = findByIdOrThrowNotFound(id);
+        repo.delete(employee);
         if (employee.getImage() != null){
             String imageId = employee.getImage().getId();
             imageService.deleteById(imageId);
         }
-        repo.delete(employee);
     }
 
     @Override
